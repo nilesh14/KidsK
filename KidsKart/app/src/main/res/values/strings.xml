@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">KidsKart</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="volley_error">Error while fetching data</string>
+    <string name="webview_error">Error while loading dashboard</string>
+</resources>
