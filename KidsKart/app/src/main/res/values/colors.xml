@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="price_orange">#EE9358</color>
+    <color name="details_orange">#E86708</color>
+    <color name="add_to_cart_orange">#E96708</color>
+    <color name="subcategory_name_items">#F9FAFB</color>
+    <color name="k">#EC6607</color>
+    <color name="i">#C70180</color>
+    <color name="d">#0095CC</color>
+    <color name="s">#0CA541</color>
+    <color name="new_green">#07A440</color>
+    <color name="indicator_fill_color">#E75600</color>
+    <color name="indicator_empty_color">#565658</color>
+    <color name="separater_grey">#B1B1B1</color>
+    <color name="add_to_cart_white">#F9FAFB</color>
+
+</resources>

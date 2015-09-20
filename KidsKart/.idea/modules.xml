@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/KidsKart.iml" filepath="$PROJECT_DIR$/KidsKart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ViewPageIndicatorlibrary/ViewPageIndicatorlibrary.iml" filepath="$PROJECT_DIR$/ViewPageIndicatorlibrary/ViewPageIndicatorlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>

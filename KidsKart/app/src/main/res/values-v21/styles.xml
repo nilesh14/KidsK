@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="KidskartThemeWithoutActionBar" parent="android:Theme.Material.Light.NoActionBar.Fullscreen">
+
+    </style>
+    
+    <style name="KidskartThemeWithActionBar" parent="android:Theme.Material.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="android:Widget.Material.Light.ActionBar.Solid">
+        <item name="android:icon">@android:color/transparent</item>
+        <!--<item name="android:logo">@drawable/logo</item>
+        <item name="android:icon">@drawable/logo</item>-->
+        <!--<item name="displayOptions">useLogo|showHome</item>-->
+    </style>
+</resources>

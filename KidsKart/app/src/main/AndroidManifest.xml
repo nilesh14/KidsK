@@ -29,6 +29,10 @@
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             ></activity>
+        <activity android:name=".SubCategoryListActivity"
+            android:screenOrientation="portrait"
+            android:logo="@drawable/logo"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

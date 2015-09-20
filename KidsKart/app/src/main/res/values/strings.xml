@@ -7,4 +7,6 @@
     <string name="drawer_close">Close</string>
     <string name="volley_error">Error while fetching data</string>
     <string name="webview_error">Error while loading dashboard</string>
+    <string name="dummy_data_big">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+
 </resources>
