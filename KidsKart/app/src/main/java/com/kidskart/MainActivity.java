@@ -66,9 +66,10 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    private WebView mDrawerList;
     //WebView webViewDashboard;
     String cartCount = "";
+    String menuHTML;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
 
         //webViewDashboard = (WebView) findViewById(R.id.webViewDashboard);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (WebView) findViewById(R.id.left_drawer);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -130,6 +131,10 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
                 createMyReqErrorListener());
         queue.add(reqGetHomeData);
 
+        StringRequest reqGetMenuData = new StringRequest(Request.Method.GET, Constants.GET_MENUHTML_CODE_URL,menuReqSuccessListener(),
+                menuReqErrorListener());
+        queue.add(reqGetMenuData);
+
         pDialog.setMessage("Loading ...");
         pDialog.show();
     }
@@ -162,15 +167,6 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
         };
     }
 
-    private void updateCartCount(){
-        if(menu != null){
-            View count = menu.findItem(R.id.actionCart).getActionView();
-            TextView menu_badge = (TextView) count.findViewById(R.id.menu_badge);
-            menu_badge.setText(cartCount);
-        }
-    }
-
-
     private Response.ErrorListener createMyReqErrorListener() {
         return new Response.ErrorListener() {
             @Override
@@ -179,6 +175,42 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
                 Toast.makeText(MainActivity.this, getString(R.string.volley_error),Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    private Response.Listener<String> menuReqSuccessListener() {
+        return new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //setTvResultText(response);
+                Log.d(TAG, "Response = " + response);
+                if(pDialog != null && pDialog.isShowing()){
+                    pDialog.dismiss();
+                }
+                if (response != null) {
+                    menuHTML = response;
+                    mDrawerList.loadDataWithBaseURL("", menuHTML, "text/html", "UTF-8", "");
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener menuReqErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mTvResult.setText(error.getMessage());
+                Toast.makeText(MainActivity.this, getString(R.string.volley_error),Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+
+    private void updateCartCount(){
+        if(menu != null){
+            View count = menu.findItem(R.id.actionCart).getActionView();
+            TextView menu_badge = (TextView) count.findViewById(R.id.menu_badge);
+            menu_badge.setText(cartCount);
+        }
     }
 
     @Override
