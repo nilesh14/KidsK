@@ -11,6 +11,7 @@ public class Constants {
 
     public static String DOMAIN = "http://kidskartapp.a2zportals.com";
     public static String GET_DASHBOARDHTML_CODE_URL = DOMAIN+"/index.php/mobileapi/";
+    public static String GET_PRODUCT_DATA_URL = DOMAIN+"/index.php/mobileapi/products/";
     public static String GET_MENUHTML_CODE_URL = DOMAIN+"/index.php/mobile-menu";
 
     public static final int TIMEOUT_SOCKET = (int) TimeUnit.MINUTES.toMillis(1);

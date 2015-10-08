@@ -18,6 +18,7 @@
         android:padding="10dp">
 
         <ImageView
+            android:id="@+id/imgProductImage"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_weight="3"
@@ -60,7 +61,6 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginTop="5dp">
 
                 <Button
@@ -74,9 +74,11 @@
                     android:background="@color/details_orange"/>
 
                 <ImageView
+                    android:id="@+id/imgBrandImage"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:scaleType="fitCenter"
                     android:adjustViewBounds="true"
                     android:src="@drawable/mothercare"/>

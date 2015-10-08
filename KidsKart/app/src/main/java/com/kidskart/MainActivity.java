@@ -1,32 +1,22 @@
 package com.kidskart;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,10 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kidskart.application.MyVolley;
 import com.kidskart.callbacks.SwitchFragmentsCallback;
-import com.kidskart.fragment.CategoryListFragment;
+import com.kidskart.fragment.HomePageFragment;
 import com.kidskart.util.Constants;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +40,7 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
     public static final int FRAG_CATEGORY_LIST = 1;
     public static final int FRAG_SUBCATEGORY_LIST = 2;
     public static final int FRAG_PRODUCT_DETAIL = 3;
-    public static final int FRAG_BITCH_CORNER = 4;
+    public static final int FRAG_FILTER = 4;
     public static final int FRAG_PROFILE = 5;
     public static final int FRAG_MORE = 6;
     public static final int FRAG_BITCH_LOGIN = 7;
@@ -126,14 +114,7 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
         //getActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setIcon(R.drawable.logo);
 
-        RequestQueue queue = MyVolley.getRequestQueue();
-        StringRequest reqGetHomeData = new StringRequest(Request.Method.GET, Constants.GET_DASHBOARDHTML_CODE_URL,createMyReqSuccessListener(),
-                createMyReqErrorListener());
-        queue.add(reqGetHomeData);
-
-        StringRequest reqGetMenuData = new StringRequest(Request.Method.GET, Constants.GET_MENUHTML_CODE_URL,menuReqSuccessListener(),
-                menuReqErrorListener());
-        queue.add(reqGetMenuData);
+        new Handler().postDelayed(getData,200);
 
         pDialog.setMessage("Loading ...");
         pDialog.show();
@@ -153,7 +134,7 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
                     String url = jsonObject.optString("home_url");
 
                     //initWebview(url);
-                    CategoryListFragment fragment = new CategoryListFragment();
+                    HomePageFragment fragment = new HomePageFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("url",url);
                     fragment.setArguments(bundle);
@@ -167,11 +148,29 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
         };
     }
 
+    Runnable getData = new Runnable() {
+        @Override
+        public void run() {
+            RequestQueue queue = MyVolley.getRequestQueue();
+            StringRequest reqGetHomeData = new StringRequest(Request.Method.GET, Constants.GET_DASHBOARDHTML_CODE_URL,createMyReqSuccessListener(),
+                    createMyReqErrorListener());
+            reqGetHomeData.setShouldCache(false);
+            queue.add(reqGetHomeData);
+
+            StringRequest reqGetMenuData = new StringRequest(Request.Method.GET, Constants.GET_MENUHTML_CODE_URL,menuReqSuccessListener(),
+                    menuReqErrorListener());
+            reqGetMenuData.setShouldCache(false);
+            queue.add(reqGetMenuData);
+        }
+    };
     private Response.ErrorListener createMyReqErrorListener() {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //mTvResult.setText(error.getMessage());
+                if(pDialog != null && pDialog.isShowing()){
+                    pDialog.dismiss();
+                }
                 Toast.makeText(MainActivity.this, getString(R.string.volley_error),Toast.LENGTH_SHORT).show();
             }
         };
@@ -188,7 +187,9 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
                 }
                 if (response != null) {
                     menuHTML = response;
-                    mDrawerList.loadDataWithBaseURL("", menuHTML, "text/html", "UTF-8", "");
+                    WebSettings settings = mDrawerList.getSettings();
+                    settings.setJavaScriptEnabled(true);
+                    mDrawerList.loadDataWithBaseURL(Constants.GET_MENUHTML_CODE_URL, menuHTML, "text/html", "UTF-8", "");
                 }
             }
         };
@@ -199,6 +200,9 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
             @Override
             public void onErrorResponse(VolleyError error) {
                 //mTvResult.setText(error.getMessage());
+                if(pDialog != null && pDialog.isShowing()){
+                    pDialog.dismiss();
+                }
                 Toast.makeText(MainActivity.this, getString(R.string.volley_error),Toast.LENGTH_SHORT).show();
             }
         };
@@ -283,7 +287,7 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
         for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
             getSupportFragmentManager().popBackStack();
         }
-        transaction.replace(R.id.content_frame, fragment,String.valueOf(fragID)).addToBackStack(String.valueOf(fragID)).commit();
+        transaction.replace(R.id.content_frame, fragment,String.valueOf(fragID)).addToBackStack(String.valueOf(fragID)).commitAllowingStateLoss();
         //updateButtonBG();
         //prepareHeader();
     }
@@ -295,9 +299,9 @@ public class MainActivity extends FragmentActivity implements SwitchFragmentsCal
 
         currentFragmentInstance = fragment;
         if(addToBackStack){
-            transaction.replace(R.id.content_frame, fragment,String.valueOf(fragID)).addToBackStack(String.valueOf(fragID)).commit();
+            transaction.replace(R.id.content_frame, fragment,String.valueOf(fragID)).addToBackStack(String.valueOf(fragID)).commitAllowingStateLoss();
         }else{
-            transaction.replace(R.id.content_frame, fragment).commit();
+            transaction.replace(R.id.content_frame, fragment).commitAllowingStateLoss();
         }
         //updateButtonBG();
         //prepareHeader();

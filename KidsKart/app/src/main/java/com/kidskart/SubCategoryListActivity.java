@@ -24,7 +24,7 @@ public class SubCategoryListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*setContentView(R.layout.subcategory_fragment);
+        /*setContentView(R.layout.categorylist_fragment);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
